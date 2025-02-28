@@ -33,7 +33,7 @@ jobs:
              ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@${{secrets.HOST_IP}} -t << 'EOF'
               ls ./
               if docker ps --format '{{.Names}}' | grep -q 'user_backend'; then
-              echo "deleting .."
+              echo "deleting container user_backend.."
               docker rm user_backend -f
               fi
               docker run -d -p 8080:8080 -e DATABASE_URL=${{secrets.DATABASE_URL}} --name user_backend itzlg/monorepo-ci-cd-backend:${{ github.sha }}

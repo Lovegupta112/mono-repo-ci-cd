@@ -1,0 +1,28 @@
+{
+  "name": "mono-repo-ci-cd",
+  "devDependencies": {
+    "prettier": "^3.5.0",
+    "turbo": "^2.4.2",
+    "typescript": "5.7.3"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "bun@1.2.3",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types",
+    "db:generate":"cd packages/db && npx prisma generate && cd ../..",
+    "start:http":"cd apps/http-server && bun run start",
+    "start:ws":"cd apps/ws-server && bun run start",
+    "start:web":"cd apps/web && bun run start"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

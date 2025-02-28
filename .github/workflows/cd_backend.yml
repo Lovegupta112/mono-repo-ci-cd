@@ -29,6 +29,7 @@ jobs:
          - name: deploy to vm
            run: |
              echo "${{secrets.SSH_PRIVATE_KEY}}" &> ~/ssh_key
+             ls ~/ssh_key
              chmod 700 ~/ssh_key
              ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@${{secrets.HOST_IP}} -t << 'EOF'
               docker stop user_backend

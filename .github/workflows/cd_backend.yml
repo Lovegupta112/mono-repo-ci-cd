@@ -32,8 +32,13 @@ jobs:
              ls ~/ssh_key
              chmod 700 ~/ssh_key
              ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@${{secrets.HOST_IP}} -t << 'EOF'
+
+              if docker ps --format '{{.Names}}' | grep -q 'user_backend'; then
               docker stop user_backend
+              else
               docker run -d -p 8080:8080 -e DATABASE_URL=${{secrets.DATABASE_URL}} --name user_backend itzlg/monorepo-ci-cd-backend:${{secrets.github_sha}}
+              fi
+              
              EOF
              
            

@@ -26,5 +26,13 @@ jobs:
              push: true
              tags: itzlg/monorepo-ci-cd-backend:${{github.sha}}
           
+         - name: deploy to vm
+           run: |
+             echo "${{secrets.SSH_PRIVATE_KEY}}" &> ~/ssh_key
+             chmod 700 ~/ssh_key
+             ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@${{secrets.HOST_IP}} -t << 'EOF'
+              docker stop user_backend
+              docker run -d -p 8080:8080 -e DATABASE_URL=${{secrets.DATABASE_URL}} --name user_backend itzlg/monorepo-ci-cd-backend:${{secrets.github_sha}}
+             EOF
              
            

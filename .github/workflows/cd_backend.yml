@@ -32,7 +32,7 @@ jobs:
              chmod 700 ~/ssh_key
              ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@${{secrets.HOST_IP}} -t << 'EOF'
               ls ./
-              if docker ps --format '{{.Names}}' | grep -q 'user_backend'; then
+              if docker ps -a --format '{{.Names}}' | grep -q 'user_backend'; then
               echo "deleting container user_backend.."
               docker rm user_backend -f
               docker rmi $(docker images -a -q)

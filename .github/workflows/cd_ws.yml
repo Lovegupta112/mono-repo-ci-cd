@@ -36,7 +36,6 @@ jobs:
           chmod 700 ~/ssh_key
           ssh -o StrictHostKeyChecking=no -i ~/ssh_key ${{secrets.HOST_IP}} -t << 'EOF'
               
-            ls ./
             
             if docker ps -a --format '{{.Names}}' | grep -q ${{secrets.WS_CONTAINER_NAME}}; then
   
@@ -61,9 +60,11 @@ jobs:
 
       - name: start the container
         run: | 
-             ls ./
-             docker run -d -p 8081:8081 \
-             -e DATABASE_URL=${{secrets.DATABASE_URL}} \
-             --name user_ws itzlg/monorepo-ci-cd-ws:${{github.sha}}
+              echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key \
+              chmod 700 ~/ssh_key \
+              ssh -o StrictHostKeyChecking=no -i ~/ssh_key ${{secrets.HOST_IP}} -t \
+              docker run -d -p 8081:8081 \
+              -e DATABASE_URL=${{secrets.DATABASE_URL}} \
+              --name user_ws itzlg/monorepo-ci-cd-ws:${{github.sha}}
              
          

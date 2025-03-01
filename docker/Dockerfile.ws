@@ -8,7 +8,7 @@ COPY ./bun.lock ./bun.lock
 COPY ./turbo.json ./turbo.json 
 COPY ./package.json  ./package.json
 
-COPY ./apps/ws-server ./app/ws-server
+COPY ./apps/ws-server ./apps/ws-server
 
 RUN bun install 
 RUN bun run db:generate

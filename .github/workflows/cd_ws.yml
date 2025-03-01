@@ -61,6 +61,7 @@ jobs:
 
       - name: start the container
         run: | 
+             ls ./
              docker run -d -p 8081:8081 \
              -e DATABASE_URL=${{secrets.DATABASE_URL}} \
              --name user_ws itzlg/monorepo-ci-cd-ws:${{github.sha}}

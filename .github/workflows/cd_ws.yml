@@ -1,0 +1,41 @@
+name: websocket deploying
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: checkout the repo
+        uses: action/checkout@v4
+
+      - name: login to docker-hub
+        uses: docker/login-action@v3
+        with: 
+           username: ${{secrets.DOCKERHUB_USERNAME}}
+           password: ${{secrets.DOCKERHUB_PASSWORD}}
+
+      - name: build and push to dockerhub
+        uses: docker/build-push-action@v6
+        with: 
+          context: .
+          file: ./docker/Dockerfile.ws
+          push: true
+          tag: itzlg/monorepo-ci-cd-ws:${{github.sha}}
+    
+      - name: removing existing container and image
+        uses: Lovegupta112/cleanup-docker-container-img@v1.0.0
+        with:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+          HOST_IP: ${{secrets.HOST_IP}}
+          CONTAINER_NAME: 'user_ws'
+
+      - name: start the container
+        run: | 
+             docker run -d -p 8081:8081 \
+             -e DATABASE_URL=${{secrets.DATABASE_URL}} \
+             --name user_ws itzlg/monorepo-ci-cd-ws:${{github.sha}}
+             
+         

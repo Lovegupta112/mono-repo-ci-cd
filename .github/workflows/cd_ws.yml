@@ -23,7 +23,7 @@ jobs:
           context: .
           file: ./docker/Dockerfile.ws
           push: true
-          tag: itzlg/monorepo-ci-cd-ws:${{github.sha}}
+          tags: itzlg/monorepo-ci-cd-ws:${{github.sha}}
     
       - name: removing existing container and image
         uses: Lovegupta112/cleanup-docker-container-img@v1.0.1

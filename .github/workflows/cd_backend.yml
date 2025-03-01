@@ -37,7 +37,7 @@ jobs:
               docker rm user_backend -f
               docker rmi $(docker images -a -q)
               fi
-              # docker run -d -p 8080:8080 -e DATABASE_URL=${{secrets.DATABASE_URL}} --name user_backend itzlg/monorepo-ci-cd-backend:${{ github.sha }}
+              docker run -d -p 8080:8080 -e DATABASE_URL=${{secrets.DATABASE_URL}} --name user_backend itzlg/monorepo-ci-cd-backend:${{ github.sha }}
 
              EOF
              

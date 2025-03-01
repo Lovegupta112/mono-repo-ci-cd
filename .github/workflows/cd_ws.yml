@@ -26,11 +26,38 @@ jobs:
           tags: itzlg/monorepo-ci-cd-ws:${{github.sha}}
     
       - name: removing existing container and image
-        uses: Lovegupta112/cleanup-docker-container-img@v1.0.1
-        with:
-          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
-          HOST_IP: ${{secrets.HOST_IP}}
-          CONTAINER_NAME: 'user_ws'
+        # uses: Lovegupta112/cleanup-docker-container-img@v1.0.1
+        # with:
+        #   SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+        #   HOST_IP: ${{secrets.HOST_IP}}
+        #   CONTAINER_NAME: 'user_ws'
+        run: |  
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
+          chmod 700 ~/ssh_key
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key ${{secrets.HOST_IP}} -t << 'EOF'
+              
+            ls ./
+            
+            if docker ps -a --format '{{.Names}}' | grep -q ${{secrets.WS_CONTAINER_NAME}}; then
+  
+                IMAGE_ID=$(docker inspect --format='{{.Image}}' ${{secrets.WS_CONTAINER_NAME}})
+                echo "Deleting container ..${{secrets.WS_CONTAINER_NAME}}"
+                docker rm -f ${{secrets.WS_CONTAINER_NAME}} 
+            
+                if [ -n "$IMAGE_ID" ]; then
+                  echo "Deleting image ..$IMAGE_ID"
+                  docker rmi -f "$IMAGE_ID"
+                else
+                    echo "No image found for the container- ${{secrets.WS_CONTAINER_NAME}}"
+                fi 
+  
+            else
+             echo "container ${{secrets.WS_CONTAINER_NAME}} does not exist."
+            fi
+            echo "completed operations.."
+          EOF
+           
+
 
       - name: start the container
         run: | 

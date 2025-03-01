@@ -30,7 +30,7 @@ jobs:
            run: |
              echo "${{secrets.SSH_PRIVATE_KEY}}" &> ~/ssh_key
              chmod 700 ~/ssh_key
-             ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@${{secrets.HOST_IP}} -t << 'EOF'
+             ssh -o StrictHostKeyChecking=no -i ~/ssh_key ${{secrets.HOST_IP}} -t << 'EOF'
               ls ./
               if docker ps -a --format '{{.Names}}' | grep -q 'user_backend'; then
               echo "deleting container user_backend.."

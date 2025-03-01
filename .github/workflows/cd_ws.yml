@@ -32,7 +32,7 @@ jobs:
         #   HOST_IP: ${{secrets.HOST_IP}}
         #   CONTAINER_NAME: 'user_ws'
         run: |  
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key
           chmod 700 ~/ssh_key
           ssh -o StrictHostKeyChecking=no -i ~/ssh_key ${{secrets.HOST_IP}} -t << 'EOF'
               

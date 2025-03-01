@@ -26,7 +26,7 @@ jobs:
           tags: itzlg/monorepo-ci-cd-ws:${{github.sha}}
     
       - name: removing existing container and image
-        uses: Lovegupta112/cleanup-docker-container-img@v1.0.1
+        uses: Lovegupta112/cleanup-docker-container-img@v1.0.2
         with:
           SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
           HOST_IP: ${{secrets.HOST_IP}}

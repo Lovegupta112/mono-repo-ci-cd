@@ -60,11 +60,12 @@ jobs:
 
       - name: start the container
         run: | 
-              echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key \
-              chmod 700 ~/ssh_key \
-              ssh -o StrictHostKeyChecking=no -i ~/ssh_key ${{secrets.HOST_IP}} -t \
-              docker run -d -p 8081:8081 \
-              -e DATABASE_URL=${{secrets.DATABASE_URL}} \
+              echo "${{ secrets.SSH_PRIVATE_KEY }}" &> ~/ssh_key 
+              chmod 700 ~/ssh_key 
+              ssh -o StrictHostKeyChecking=no -i ~/ssh_key ${{secrets.HOST_IP}} -t << 'EOF'
+              docker run -d -p 8081:8081 
+              -e DATABASE_URL=${{secrets.DATABASE_URL}} 
               --name user_ws itzlg/monorepo-ci-cd-ws:${{github.sha}}
+              EOF
              
          
